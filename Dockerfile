@@ -3,13 +3,23 @@ FROM ubuntu:24.04
 
 ENV DEBIAN_FRONTEND=noninteractive
 
-# Paso 2: instalar el servidor web Apache
+# Apache (servidor web), PHP con soporte para MySQL y MariaDB (base de datos compatible con MySQL)
 RUN apt-get update \
-    && apt-get install -y --no-install-recommends apache2 \
+    && apt-get install -y --no-install-recommends \
+       apache2 php libapache2-mod-php php-mysql mariadb-server mariadb-client \
     && rm -rf /var/lib/apt/lists/* /var/www/html/index.html
 
-# Copiar la página estática a la carpeta que publica Apache
+# Archivos de la aplicación y script de la base de datos
 COPY src/public/ /var/www/html/
+COPY db/ /docker-init/
+COPY entrypoint.sh /usr/local/bin/entrypoint.sh
+RUN chmod +x /usr/local/bin/entrypoint.sh
 
-# Apache en primer plano para que el contenedor siga vivo
-CMD ["apachectl", "-D", "FOREGROUND"]
+# Variables de conexión a la base de datos
+ENV DB_HOST=127.0.0.1 \
+    DB_NAME=tutorias \
+    DB_USER=tutorias \
+    DB_PASS=tutorias123
+
+# Al arrancar: inicia MariaDB, crea la base de datos y arranca Apache
+ENTRYPOINT ["/usr/local/bin/entrypoint.sh"]
