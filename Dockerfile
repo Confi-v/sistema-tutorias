@@ -26,6 +26,9 @@ ENV DB_HOST=127.0.0.1 \
     DB_USER=tutorias \
     DB_PASS=tutorias123
 
+# Carpeta de datos de MariaDB: se monta como volumen para que los datos persistan
+VOLUME ["/var/lib/mysql"]
+
 # Puerto que publica el contenedor
 EXPOSE 10085
 
