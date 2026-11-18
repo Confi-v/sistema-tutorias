@@ -1,6 +1,15 @@
 # Sistema de Tutorías - UPSLP - Sistemas Virtuales
-# Paso 1: imagen base con el sistema operativo (Ubuntu 24.04)
 FROM ubuntu:24.04
 
-# Por ahora el contenedor solo abre una terminal de Ubuntu
-CMD ["bash"]
+ENV DEBIAN_FRONTEND=noninteractive
+
+# Paso 2: instalar el servidor web Apache
+RUN apt-get update \
+    && apt-get install -y --no-install-recommends apache2 \
+    && rm -rf /var/lib/apt/lists/* /var/www/html/index.html
+
+# Copiar la página estática a la carpeta que publica Apache
+COPY src/public/ /var/www/html/
+
+# Apache en primer plano para que el contenedor siga vivo
+CMD ["apachectl", "-D", "FOREGROUND"]
