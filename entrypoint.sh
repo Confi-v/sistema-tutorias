@@ -21,7 +21,7 @@ SetEnv DB_PASS ${DB_PASS}
 CONF
 
 # 4. Iniciar MariaDB en segundo plano (solo escucha dentro del contenedor)
-mysqld_safe --user=mysql --bind-address=127.0.0.1 > /dev/null 2>&1 &
+mysqld_safe --user=mysql --bind-address=127.0.0.1 --default-time-zone='-06:00' > /dev/null 2>&1 &
 
 for i in $(seq 1 30); do
     mysqladmin ping --silent && break
