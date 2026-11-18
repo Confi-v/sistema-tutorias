@@ -32,6 +32,6 @@ FLUSH PRIVILEGES;
 SQL
 mysql -u root "${DB_NAME}" < /docker-init/init.sql
 
-echo ">> Sistema de Tutorías listo"
+echo ">> Sistema de Tutorías listo en http://localhost:10085"
 # Apache en primer plano (mantiene vivo el contenedor)
 exec apachectl -D FOREGROUND
